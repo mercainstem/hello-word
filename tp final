@@ -1,0 +1,42 @@
+importar { Terminal } desde '@es-js/terminal'
+importar { obtenerJson } desde "https://cdn.esjs.dev/MYewdgzgLgBCBGUCmYkCcBSFwwLwwEMIBLMYNcEGAMwFczicAKWtAGwEoYBvAKBhihIsNEggAHWmKgE8MMePQE0NJFGAALFuw78YoqCDRhl8iUpWiJU6AQB0AK2xgmugL69eSAB7ijMlW44RBR0LBwPIA"
+importar cryptojs desde "https://cdn.jsdelivr.net/npm/crypto-js@4.1.1/+esm"
+importar { calcularProximoFeriado } desde "https://cdn.esjs.dev/KYDwDg9gTgLghlABAMwK4DsDGBLC7GZwA2mqRCAClBCNgLYQBiwU2cAJhABTItucBnAJSIA3gChEBPAJiI4AC2hxEAXgJRgCRM0wK4XIZOnpZ8gI8QAgphipia+UqhwAdBABGMYOhZXLhsaYMnLsbDZ2DuqKyu5ePiwAImyBUsGmcnTAAhH2RI4xLnHevlAAstmGiADUiACMxpow0OjavKwcEAKuyNjo7FzGUjx8nSKqAHxDUogjHZyuWQJqqupLuQ4AZJsoowthKhOIBxtEIgA+59NS7fwQi9mIR+u2ecZGAL5AA"
+
+var CONTRASEÑA_MD5 = "7731363ed2ea93c7593cb363e932ae5c"
+
+funcion calcularMd5(cadena) {
+  retornar cryptojs.MD5(Cadena(cadena)).aCadena()
+}
+
+asincrono funcion obtenerProximoFeriado() {
+  var feriados = esperar obtenerJson("https://nolaborables.com.ar/api/v2/feriados/2023")
+  var proximoferiado = calcularProximoFeriado(feriados)
+
+  Terminal.escribir("Próximo feriado:")
+  Terminal.escribir(proximoferiado.motivo)
+  Terminal.escribir(`${proximoferiado.dia}/${proximoferiado.mes}/2023`)
+  Terminal.escribir("Presiona Enter para volver a preguntar")
+  esperar Terminal.leerEnter()
+  obtenerProximoFeriado()
+}
+
+asincrono funcion inicio() {
+  Terminal.limpiar()
+  Terminal.escribir("Ingresa tu contraseña")
+  var contraseña = esperar Terminal.leer()
+
+  si (calcularMd5(contraseña) === CONTRASEÑA_MD5) {
+    obtenerProximoFeriado()
+  } sino {
+    Terminal.escribir("Contraseña incorrecta")
+    Terminal.escribir("Presiona Enter para preguntar de nuevo")
+    esperar Terminal.leerEnter()
+    inicio()
+  }
+}
+
+// Llamada a la función de inicio para comenzar el programa
+inicio()
+
+inicio()
